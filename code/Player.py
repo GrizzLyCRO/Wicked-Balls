@@ -7,9 +7,9 @@ from direct.showbase.ShowBase import ShowBase
 
 class Player(DirectObject):
     
-    def setWorld(self,world):
-        self.world = world.world
-        self.parent = world
+    def setWorld(self,parent):
+        self.worldNP = parent.NP
+        self.parent = parent
     
     def init(self):
         self.setupBody()
@@ -26,9 +26,9 @@ class Player(DirectObject):
         self.node.setMass(100)
         self.NP = render.attachNewNode(self.node)
         self.NP.setPos(0, 0, 1.01)
-        self.world.attachRigidBody(self.node)
+        self.worldNP.attachRigidBody(self.node)
         self.node.setRestitution(1.0)
-        self.node.setFriction(0)
+        self.node.setFriction(1)
 
         
     def setupControls(self):

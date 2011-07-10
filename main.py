@@ -25,7 +25,7 @@ class Game(ShowBase):
         
     def update(self,task):
         dt = globalClock.getDt()
-        self.world.world.doPhysics(dt)
+        self.world.NP.doPhysics(dt)
         return task.cont
     
 if __name__ == '__main__':      
