@@ -1,4 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
+
+from direct.showbase.ShowBase import ShowBase
 from panda3d.bullet import *
 
 from panda3d.core import *

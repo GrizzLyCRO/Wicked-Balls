@@ -1,6 +1,10 @@
-import direct.directbase.DirectStart
-from panda3d.core import Vec3
+from pandac.PandaModules import loadPrcFileData
 
+loadPrcFileData("", "sync-video #f")
+loadPrcFileData("", "show-frame-rate-meter #t")
+from direct.showbase.ShowBase import ShowBase
+
+from panda3d.core import Vec3
 
 from panda3d.bullet import *
 
@@ -8,19 +12,22 @@ from code.World import *
 from code.Player import Player
 
 
-base.cam.setPos(0, -10, 0)
-base.cam.lookAt(0, 0, 0)
 
-w = World()
-p = Player()
-p.setWorld(w)
-p.init()
- 
-# Update
-def update(task):
-    dt = globalClock.getDt()
-    w.world.doPhysics(dt)
-    return task.cont
- 
-taskMgr.add(update, 'update')
-run()
+class Game(ShowBase):
+
+    def __init__(self):
+        ShowBase.__init__(self) 
+        self.world = World()
+        self.player = Player()
+        self.player.setWorld(self.world)
+        self.player.init()
+        taskMgr.add(self.update, 'update')
+        
+    def update(self,task):
+        dt = globalClock.getDt()
+        self.world.world.doPhysics(dt)
+        return task.cont
+    
+if __name__ == '__main__':      
+    winst = Game()
+    winst.run()         

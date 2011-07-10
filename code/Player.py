@@ -1,6 +1,8 @@
 from direct.showbase.DirectObject import DirectObject
+from direct.showbase.InputStateGlobal import inputState
 from panda3d.bullet import *
 from panda3d.core import *
+from direct.showbase.ShowBase import ShowBase
 
 
 class Player(DirectObject):
@@ -30,18 +32,28 @@ class Player(DirectObject):
 
         
     def setupControls(self):
-        self.accept("a",self.moveLeft)
-        self.accept("w",self.moveForward)
-        self.accept("s",self.moveBackward)
-        self.accept("d",self.moveRight)
+        #handle input
+        taskMgr.add(self.processInput, "process input")
         
-    def moveLeft(self):
-        self.NP.setX(self.NP,-1)
-    def moveRight(self):
-        self.NP.setX(self.NP,1)
-    def moveForward(self):
-        self.NP.setY(self.NP,1)
-    def moveBackward(self):
-        self.NP.setY(self.NP,-1)
+        #keyboard shortcuts
+        inputState.watchWithModifiers('forward', 'w')
+        inputState.watchWithModifiers('left', 'a')
+        inputState.watchWithModifiers('right', 'd')
+        inputState.watchWithModifiers('back', 's')
+
+        
+    def processInput(self, task):
+        speed = 40
+        self.dt = globalClock.getDt()
+        if inputState.isSet('left'):
+            self.NP.setX(self.NP, -self.dt * speed)
+        if inputState.isSet('right'):
+            self.NP.setX(self.NP, self.dt * speed)
+        if inputState.isSet('forward'):
+            self.NP.setY(self.NP, self.dt * speed)
+        if inputState.isSet('back'):
+            self.NP.setY(self.NP, -self.dt * speed)
+            
+        return task.cont
         
         
