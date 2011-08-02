@@ -9,7 +9,7 @@ class Player(DirectObject):
     
     def setWorld(self,parent):
         self.worldNP = parent.NP
-        self.parent = parent
+        self.world = parent
     
     def init(self):
         self.setupBody()
