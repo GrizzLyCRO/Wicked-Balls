@@ -24,3 +24,10 @@ class Ball():
         self.NP = render.attachNewNode(self.node)
         self.NP.setPos(5, 0, 1.5)
         self.model.reparentTo(self.NP)
+        self.NP.setPythonTag("pyClass",self)
+        
+    def destroyMe(self):
+        print "deleting"
+        self.NP.clearPythonTag("pyClass")
+        self.worldNP.removeRigidBody(self.node)
+        self.NP.removeNode()

@@ -52,6 +52,7 @@ class World(DirectObject):
     def createWalls(self):
         distance = 20 #distance of walls from coordinate system center
         walls = ((1,0,0),(-1,0,0),(0,1,0),(0,-1,0))
+        n = 1
         for wall in walls:
             shape = BulletPlaneShape(Vec3(wall), 0)
             node = BulletGhostNode('Wall')
@@ -59,10 +60,12 @@ class World(DirectObject):
             node.setFriction(0)
             node.notifyCollisions(True)
             node.addShape(shape)
+            node.setTag("playerNum",`n`)
             self.goals.append(node)
             np = render.attachNewNode(node)
             np.setPos(wall[0]*distance*-1, wall[1]*distance*-1, 0)
             self.NP.attachGhost(node)
+            n = n+1
 
     def createFloor(self):
         shape = BulletPlaneShape(Vec3(0, 0, 1), 0)
@@ -75,6 +78,10 @@ class World(DirectObject):
         self.NP.attachRigidBody(node)
 
     # finally the event handlers 
-    def doAdded(self, node1, node2): 
+    def doAdded(self, node1, node2):
         if node1.getName() == "WickedBall" and  node2.getName() == "Wall":
-            print "bingo!" 
+            x = node1.getPythonTag("pyClass")
+            x.destroyMe()
+            playerNum = node2.getTag("playerNum")
+            print "player "+playerNum + " just had an utjerani!"
+
