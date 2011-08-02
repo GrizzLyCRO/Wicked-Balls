@@ -28,7 +28,7 @@ class Player(DirectObject):
         self.NP.setPos(0, 0, 1.01)
         self.worldNP.attachRigidBody(self.node)
         self.node.setRestitution(1.0)
-        self.node.setFriction(1)
+        self.node.setFriction(0)
 
         
     def setupControls(self):
