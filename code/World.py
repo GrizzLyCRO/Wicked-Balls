@@ -29,6 +29,7 @@ class World(DirectObject):
         
     def keyBinds(self):
         self.accept("f1",self.toggleDebug)
+        self.accept("f2",self.createBall)
         
     def toggleDebug(self):
             if self.debugNP.isHidden():
