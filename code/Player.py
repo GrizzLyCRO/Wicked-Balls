@@ -7,7 +7,7 @@ from direct.showbase.ShowBase import ShowBase
 
 class Player(DirectObject):
     
-    def setWorld(self,parent):
+    def setWorld(self, parent):
         self.worldNP = parent.NP
         self.world = parent
     
@@ -40,11 +40,17 @@ class Player(DirectObject):
         inputState.watchWithModifiers('left', 'a')
         inputState.watchWithModifiers('right', 'd')
         inputState.watchWithModifiers('back', 's')
+        inputState.watchWithModifiers('turbo', 'k')
 
         
     def processInput(self, task):
-        speed = 40
         self.dt = globalClock.getDt()
+        speed = 40
+        turboModifier = 3
+        
+        if inputState.isSet('turbo'):
+            speed = speed*turboModifier
+        
         if inputState.isSet('left'):
             self.NP.setX(self.NP, -self.dt * speed)
         if inputState.isSet('right'):
