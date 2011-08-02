@@ -14,8 +14,9 @@ class Ball():
         self.node.addShape(shape)
         
         self.node.setMass(1)
-        self.node.setRestitution(1.02)
-        self.node.setFriction(0)
+        self.node.setRestitution(1.00)
+        self.node.setFriction(0.25)
+        self.node.setAngularFactor(Vec3(4,4,4))
         self.worldNP.attachRigidBody(self.node)
         
         self.model = loader.loadModel("smiley")
@@ -23,28 +24,3 @@ class Ball():
         self.NP = render.attachNewNode(self.node)
         self.NP.setPos(5, 0, 1.5)
         self.model.reparentTo(self.NP)
-        
-        taskMgr.add(self.updateVelocity, "updateVelocity")
-    
-    def updateVelocity(self, task):
-        #we do this to prevent ball from goign in straight line
-        velocity = self.node.getLinearVelocity()
-        #print velocity
-        x = velocity[0]+1.0
-        y = velocity[1]+1.0
-        factor = 10
-        angle = math.fabs(x/y)
-        if angle < 1:
-            angle = 1/angle
-        if angle > factor:
-            if x < y:
-                x = y
-            else:
-                y = x
-            print "update"
-            newVelocity = Vec3(x,y,0) 
-            
-            self.node.setLinearVelocity(velocity)
-            
-        
-        return task.cont
