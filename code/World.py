@@ -19,6 +19,7 @@ class World(DirectObject):
     def createBall(self):
         ball = Ball(self)
         self.balls.append(ball)
+
     def makeDebugNode(self):
         self.debugNode = BulletDebugNode('Debug')
         self.debugNode.setVerbose(True)
@@ -46,7 +47,7 @@ class World(DirectObject):
         walls = ((1,0,0),(-1,0,0),(0,1,0),(0,-1,0))
         for wall in walls:
             shape = BulletPlaneShape(Vec3(wall), 0)
-            node = BulletRigidBodyNode('Ground')
+            node = BulletRigidBodyNode('Wall')
             node.setRestitution(1.0)
             node.setFriction(0)
             node.addShape(shape)
