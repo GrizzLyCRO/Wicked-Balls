@@ -10,11 +10,15 @@ from Ball import Ball
 
 class World(DirectObject):
     def __init__(self):
-        self.createWorld()
-        self.makeDebugNode()
         self.keyBinds()
+        
         self.balls = []
+        self.goals = []
+        
+        self.createWorld()
         self.createBall()
+        
+        self.makeDebugNode()
         
     def createBall(self):
         ball = Ball(self)
@@ -48,15 +52,27 @@ class World(DirectObject):
         walls = ((1,0,0),(-1,0,0),(0,1,0),(0,-1,0))
         for wall in walls:
             shape = BulletPlaneShape(Vec3(wall), 0)
-            node = BulletRigidBodyNode('Wall')
+            node = BulletGhostNode('Wall')
             node.setRestitution(1.0)
             node.setFriction(0)
             node.addShape(shape)
+            self.goals.append(node)
             np = render.attachNewNode(node)
+            np.setCollideMask(BitMask32(0x0f))
             np.setPos(wall[0]*distance*-1, wall[1]*distance*-1, 0)
-            self.NP.attachRigidBody(node)
+            #self.NP.attachRigidBody(node)
+            taskMgr.add(self.checkGhost, 'checkGhost')
+            self.NP.attachGhost(node)
 
-    
+    def checkGhost(self, task):
+        print "check"
+        for goal in self.goals:
+            print goal.getNumOverlappingNodes()
+            for node in goal.getOverlappingNodes():
+                print node
+        
+        return task.cont
+
     def createFloor(self):
         shape = BulletPlaneShape(Vec3(0, 0, 1), 0)
         node = BulletRigidBodyNode('Ground')
