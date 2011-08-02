@@ -34,6 +34,8 @@ class World(DirectObject):
     def keyBinds(self):
         self.accept("f1",self.toggleDebug)
         self.accept("f2",self.createBall)
+        # listen for events 
+        self.accept('bullet-contact-added', self.doAdded) 
         
     def toggleDebug(self):
             if self.debugNP.isHidden():
@@ -55,23 +57,12 @@ class World(DirectObject):
             node = BulletGhostNode('Wall')
             node.setRestitution(1.0)
             node.setFriction(0)
+            node.notifyCollisions(True)
             node.addShape(shape)
             self.goals.append(node)
             np = render.attachNewNode(node)
-            np.setCollideMask(BitMask32(0x0f))
             np.setPos(wall[0]*distance*-1, wall[1]*distance*-1, 0)
-            #self.NP.attachRigidBody(node)
-            taskMgr.add(self.checkGhost, 'checkGhost')
             self.NP.attachGhost(node)
-
-    def checkGhost(self, task):
-        print "check"
-        for goal in self.goals:
-            print goal.getNumOverlappingNodes()
-            for node in goal.getOverlappingNodes():
-                print node
-        
-        return task.cont
 
     def createFloor(self):
         shape = BulletPlaneShape(Vec3(0, 0, 1), 0)
@@ -82,3 +73,8 @@ class World(DirectObject):
         np = render.attachNewNode(node)
         np.setPos(0, 0, 0)
         self.NP.attachRigidBody(node)
+
+    # finally the event handlers 
+    def doAdded(self, node1, node2): 
+        if node1.getName() == "WickedBall" and  node2.getName() == "Wall":
+            print "bingo!" 

@@ -10,7 +10,7 @@ class Ball():
         self.birth = globalClock.getFrameTime()
         shape = BulletSphereShape(1)
         
-        self.node = BulletRigidBodyNode('Sphere')
+        self.node = BulletRigidBodyNode('WickedBall')
         self.node.addShape(shape)
         
         self.node.setMass(1)
