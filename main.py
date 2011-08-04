@@ -1,6 +1,6 @@
 from pandac.PandaModules import loadPrcFileData
 
-#loadPrcFileData("", "sync-video #f")
+loadPrcFileData("", "sync-video #f")
 loadPrcFileData("", "show-frame-rate-meter #t")
 loadPrcFileData('', 'bullet-enable-contact-events true') 
 from direct.showbase.ShowBase import ShowBase
