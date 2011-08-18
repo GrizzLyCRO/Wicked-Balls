@@ -3,16 +3,15 @@ from direct.showbase.InputStateGlobal import inputState
 from panda3d.bullet import *
 from panda3d.core import *
 from direct.showbase.ShowBase import ShowBase
+from World import World
 
 
 class Player(DirectObject):
-    
-    def setWorld(self, parent):
-        self.worldNP = parent.NP
-        self.world = parent
+    world = World()
     
     def init(self):
         self.setupBody()
+        self.setupGoal()
         self.setupControls()
 
     def setupBody(self):
@@ -26,11 +25,23 @@ class Player(DirectObject):
         self.node.setMass(100)
         self.NP = render.attachNewNode(self.node)
         self.NP.setPos(0, 0, 1.01)
-        self.worldNP.attachRigidBody(self.node)
+        Player.world.btWorld.attachRigidBody(self.node)
         self.node.setRestitution(1.0)
         self.node.setFriction(0)
 
-        
+    def setupGoal(self):
+        shape = BulletPlaneShape(Vec3(1,0,0), 0)
+        node = BulletGhostNode('Goal')
+        node.setRestitution(1.0)
+        node.setFriction(0)
+        node.notifyCollisions(True)
+        node.addShape(shape)
+        node.setPythonTag("player",self)
+        self.goal = node
+        np = render.attachNewNode(node)
+        np.setPos(1,0,0)
+        self.NP.attachGhost(node)
+    
     def setupControls(self):
         #handle input
         taskMgr.add(self.processInput, "process input")

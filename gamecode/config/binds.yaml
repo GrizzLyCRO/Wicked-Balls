@@ -1,0 +1,19 @@
+one:
+  type: keyboard
+  left: a
+  right: d
+
+two:
+  type: keyboard
+  left  : f
+  right : h
+  
+three:
+  type: keyboard
+  left: j
+  right: l
+  
+four:
+  type: keyboard
+  left: b
+  right: m

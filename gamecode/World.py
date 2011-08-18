@@ -5,19 +5,20 @@ from panda3d.bullet import *
 
 from panda3d.core import *
 
-from Player import Player
+
 from Ball import Ball
 
 class World(DirectObject):
+    _self = None
+    def __new__(obj):
+        if obj._self is None:
+            obj._self = super(World, obj).__new__(obj)
+        return obj._self
+
     def __init__(self):
         self.keyBinds()
-        
         self.balls = []
-        self.goals = []
-        
         self.createWorld()
-        self.createBall()
-        
         self.makeDebugNode()
         
     def createBall(self):
@@ -29,13 +30,13 @@ class World(DirectObject):
         self.debugNode.setVerbose(True)
         self.debugNP = render.attachNewNode(self.debugNode)
         self.debugNP.show()
-        self.NP.setDebugNode(self.debugNP.node())
+        self.btWorld.setDebugNode(self.debugNP.node())
         
     def keyBinds(self):
         self.accept("f1",self.toggleDebug)
         self.accept("f2",self.createBall)
         # listen for events 
-        self.accept('bullet-contact-added', self.doAdded) 
+        self.accept('bullet-contact-added', self.handleCollisions) 
         
     def toggleDebug(self):
             if self.debugNP.isHidden():
@@ -44,9 +45,8 @@ class World(DirectObject):
                 self.debugNP.hide()
                 
     def createWorld(self):
-        self.NP = BulletWorld()
-        self.NP.setGravity(Vec3(0, 0, -9.81))
-        self.createWalls()
+        self.btWorld = BulletWorld()
+        self.btWorld.setGravity(Vec3(0, 0, -9.81))
         self.createFloor()
     
     def createWalls(self):
@@ -54,17 +54,7 @@ class World(DirectObject):
         walls = ((1,0,0),(-1,0,0),(0,1,0),(0,-1,0))
         n = 1
         for wall in walls:
-            shape = BulletPlaneShape(Vec3(wall), 0)
-            node = BulletGhostNode('Wall')
-            node.setRestitution(1.0)
-            node.setFriction(0)
-            node.notifyCollisions(True)
-            node.addShape(shape)
-            node.setTag("playerNum",`n`)
-            self.goals.append(node)
-            np = render.attachNewNode(node)
-            np.setPos(wall[0]*distance*-1, wall[1]*distance*-1, 0)
-            self.NP.attachGhost(node)
+
             n = n+1
 
     def createFloor(self):
@@ -75,10 +65,10 @@ class World(DirectObject):
         node.setFriction(1)
         np = render.attachNewNode(node)
         np.setPos(0, 0, 0)
-        self.NP.attachRigidBody(node)
+        self.btWorld.attachRigidBody(node)
 
     # finally the event handlers 
-    def doAdded(self, node1, node2):
+    def handleCollisions(self, node1, node2):
         if node1.getName() == "WickedBall" and  node2.getName() == "Wall":
             x = node1.getPythonTag("pyClass")
             x.destroyMe()
