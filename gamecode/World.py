@@ -19,6 +19,7 @@ class World(DirectObject):
         self.createBulletWorld()
         self.makeDebugNode()
         self.createFloor()
+        self.createPillars()
 
     def makeDebugNode(self):
         self.debugNode = BulletDebugNode('Debug')
@@ -54,6 +55,24 @@ class World(DirectObject):
         NP = render.attachNewNode(node)
         NP.setPos(0, 0, 0)
         self.btWorld.attachRigidBody(node)
+        
+    def createPillars(self):
+        angle = 360/self.totalPlayers
+        for i in range(self.totalPlayers):
+            shape = BulletCapsuleShape(4,10)
+            node = BulletRigidBodyNode('Pillar')
+            node.addShape(shape)
+            node.setRestitution(1)
+            node.setFriction(0)
+            self.pillar = node
+            NP = render.attachNewNode(node)
+            myAngle = angle*i
+            NP.setHpr(myAngle,0,0)
+            dist = self.distance*-1
+            NP.setY(NP,dist)
+            NP.setX(NP,dist)
+            #NP.setPos(0, 0, 0)
+            self.btWorld.attachRigidBody(node)
         
     def createBall(self):
         ball = Ball(self)

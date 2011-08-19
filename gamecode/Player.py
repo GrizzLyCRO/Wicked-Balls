@@ -49,7 +49,7 @@ class Player(DirectObject):
         coords[0] = coords[0]*-1
         coords[1] = coords[1]*-1
         coords[2] = 0
-        shape = BulletPlaneShape(Vec3(coords), dist)
+        shape = BulletPlaneShape(Vec3(coords), dist-2)
         node = BulletGhostNode('Goal')
         node.setRestitution(1.0)
         node.setFriction(0)
