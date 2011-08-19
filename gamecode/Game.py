@@ -4,18 +4,22 @@ from World import *
 from Player import Player
 
 
+
 class Game(ShowBase):
 
     def __init__(self):
         ShowBase.__init__(self)
         self.world = World()
-        self.player = Player()
-        self.player.init()
+        self.players = {}
+        self.world.totalPlayers = 3
+        self.world.distance = 20
+        for i in range(self.world.totalPlayers):
+            self.players[i] = Player(self.world, i)
         
         taskMgr.add(self.update, 'update')
 
 
     def update(self,task):
         dt = globalClock.getDt()
-        self.world.NP.doPhysics(dt)
+        self.world.btWorld.doPhysics(dt)
         return task.cont

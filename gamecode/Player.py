@@ -7,12 +7,15 @@ from World import World
 
 
 class Player(DirectObject):
-    world = World()
     
-    def init(self):
+    
+    def __init__(self,world,id):
+        self.world = world
+        self.playerId = id
         self.setupBody()
         self.setupGoal()
         self.setupControls()
+        
 
     def setupBody(self):
         radius = 2
@@ -24,13 +27,24 @@ class Player(DirectObject):
         self.node.setDisableDeactivation(1)
         self.node.setMass(100)
         self.NP = render.attachNewNode(self.node)
-        self.NP.setPos(0, 0, 1.01)
-        Player.world.btWorld.attachRigidBody(self.node)
+        
+        angle = 360/self.world.totalPlayers
+        myAngle = angle*self.playerId
+        self.NP.setHpr(myAngle,0,0)
+        dist = self.world.distance*-1
+        self.NP.setPos(self.NP,(0, dist, 1.01))
+        
+        self.world.btWorld.attachRigidBody(self.node)
         self.node.setRestitution(1.0)
         self.node.setFriction(0)
 
     def setupGoal(self):
-        shape = BulletPlaneShape(Vec3(1,0,0), 0)
+        coords = self.NP.getPos()
+        dist = self.world.distance*-1
+        coords[0] = coords[0]*-1
+        coords[1] = coords[1]*-1
+        coords[2] = 0
+        shape = BulletPlaneShape(Vec3(coords), dist)
         node = BulletGhostNode('Goal')
         node.setRestitution(1.0)
         node.setFriction(0)
@@ -39,8 +53,8 @@ class Player(DirectObject):
         node.setPythonTag("player",self)
         self.goal = node
         np = render.attachNewNode(node)
-        np.setPos(1,0,0)
-        self.NP.attachGhost(node)
+        np.setPos(0,0,0)
+        self.world.btWorld.attachGhost(node)
     
     def setupControls(self):
         #handle input

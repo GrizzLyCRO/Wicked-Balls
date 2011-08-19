@@ -5,25 +5,19 @@ from panda3d.bullet import *
 
 from panda3d.core import *
 
-
-from Ball import Ball
-
 class World(DirectObject):
     _self = None
-    def __new__(obj):
-        if obj._self is None:
-            obj._self = super(World, obj).__new__(obj)
-        return obj._self
+    def __new__(cls):
+        if cls._self is None:
+            cls._self = super(World, cls).__new__(cls)
+        return cls._self
 
     def __init__(self):
         self.keyBinds()
         self.balls = []
-        self.createWorld()
+        self.createBulletWorld()
         self.makeDebugNode()
-        
-    def createBall(self):
-        ball = Ball(self)
-        self.balls.append(ball)
+        self.createFloor()
 
     def makeDebugNode(self):
         self.debugNode = BulletDebugNode('Debug')
@@ -34,7 +28,6 @@ class World(DirectObject):
         
     def keyBinds(self):
         self.accept("f1",self.toggleDebug)
-        self.accept("f2",self.createBall)
         # listen for events 
         self.accept('bullet-contact-added', self.handleCollisions) 
         
@@ -44,18 +37,10 @@ class World(DirectObject):
             else:
                 self.debugNP.hide()
                 
-    def createWorld(self):
+    def createBulletWorld(self):
         self.btWorld = BulletWorld()
         self.btWorld.setGravity(Vec3(0, 0, -9.81))
-        self.createFloor()
-    
-    def createWalls(self):
-        distance = 20 #distance of walls from coordinate system center
-        walls = ((1,0,0),(-1,0,0),(0,1,0),(0,-1,0))
-        n = 1
-        for wall in walls:
 
-            n = n+1
 
     def createFloor(self):
         shape = BulletPlaneShape(Vec3(0, 0, 1), 0)
@@ -63,8 +48,9 @@ class World(DirectObject):
         node.addShape(shape)
         node.setRestitution(0)
         node.setFriction(1)
-        np = render.attachNewNode(node)
-        np.setPos(0, 0, 0)
+        self.floor = node
+        NP = render.attachNewNode(node)
+        NP.setPos(0, 0, 0)
         self.btWorld.attachRigidBody(node)
 
     # finally the event handlers 
@@ -74,4 +60,3 @@ class World(DirectObject):
             x.destroyMe()
             playerNum = node2.getTag("playerNum")
             print "player "+playerNum + " just had an utjerani!"
-

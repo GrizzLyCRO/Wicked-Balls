@@ -1,12 +1,10 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.bullet import *
-import math
 from panda3d.core import *
 
 class Ball():
     def __init__(self,parent):
         self.parent = parent
-        self.worldNP = parent.NP
         self.birth = globalClock.getFrameTime()
         shape = BulletSphereShape(1)
         
@@ -17,7 +15,8 @@ class Ball():
         self.node.setRestitution(1.00)
         self.node.setFriction(0.25)
         self.node.setAngularFactor(Vec3(4,4,4))
-        self.worldNP.attachRigidBody(self.node)
+        self.world = World()
+        self.world.btWorld.attachRigidBody(self.node)
         
         self.model = loader.loadModel("smiley")
         
