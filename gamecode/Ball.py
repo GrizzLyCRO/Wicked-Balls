@@ -3,8 +3,8 @@ from panda3d.bullet import *
 from panda3d.core import *
 
 class Ball():
-    def __init__(self,parent):
-        self.parent = parent
+    def __init__(self,world):
+        self.world = world
         self.birth = globalClock.getFrameTime()
         shape = BulletSphereShape(1)
         
@@ -15,7 +15,6 @@ class Ball():
         self.node.setRestitution(1.00)
         self.node.setFriction(0.25)
         self.node.setAngularFactor(Vec3(4,4,4))
-        self.world = World()
         self.world.btWorld.attachRigidBody(self.node)
         
         self.model = loader.loadModel("smiley")
@@ -28,5 +27,5 @@ class Ball():
     def destroyMe(self):
         print "deleting"
         self.NP.clearPythonTag("pyClass")
-        self.worldNP.removeRigidBody(self.node)
+        self.world.btWorld.removeRigidBody(self.node)
         self.NP.removeNode()

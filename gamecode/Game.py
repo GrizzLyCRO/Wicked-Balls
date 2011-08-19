@@ -11,8 +11,9 @@ class Game(ShowBase):
         ShowBase.__init__(self)
         self.world = World()
         self.players = {}
-        self.world.totalPlayers = 3
-        self.world.distance = 20
+        #self.world.totalPlayers = 3
+        #self.world.distance = 20
+        self.world.init()
         for i in range(self.world.totalPlayers):
             self.players[i] = Player(self.world, i)
         

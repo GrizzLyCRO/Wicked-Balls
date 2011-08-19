@@ -15,6 +15,7 @@ class Player(DirectObject):
         self.setupBody()
         self.setupGoal()
         self.setupControls()
+        self.lives = 15
         
 
     def setupBody(self):
@@ -37,6 +38,10 @@ class Player(DirectObject):
         self.world.btWorld.attachRigidBody(self.node)
         self.node.setRestitution(1.0)
         self.node.setFriction(0)
+
+    def ballInGoal(self):
+        self.lives -= 1
+        print "I am player "+str(self.playerId+1)+", and i just got goal.. Lives left: "+str(self.lives)
 
     def setupGoal(self):
         coords = self.NP.getPos()

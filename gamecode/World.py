@@ -5,14 +5,15 @@ from panda3d.bullet import *
 
 from panda3d.core import *
 
-class World(DirectObject):
-    _self = None
-    def __new__(cls):
-        if cls._self is None:
-            cls._self = super(World, cls).__new__(cls)
-        return cls._self
+from Ball import Ball
 
+class World(DirectObject):
+    
     def __init__(self):
+        self.totalPlayers = 4
+        self.distance = 15
+
+    def init(self):
         self.keyBinds()
         self.balls = []
         self.createBulletWorld()
@@ -28,6 +29,7 @@ class World(DirectObject):
         
     def keyBinds(self):
         self.accept("f1",self.toggleDebug)
+        self.accept("f2",self.createBall)
         # listen for events 
         self.accept('bullet-contact-added', self.handleCollisions) 
         
@@ -40,7 +42,7 @@ class World(DirectObject):
     def createBulletWorld(self):
         self.btWorld = BulletWorld()
         self.btWorld.setGravity(Vec3(0, 0, -9.81))
-
+    
 
     def createFloor(self):
         shape = BulletPlaneShape(Vec3(0, 0, 1), 0)
@@ -52,11 +54,15 @@ class World(DirectObject):
         NP = render.attachNewNode(node)
         NP.setPos(0, 0, 0)
         self.btWorld.attachRigidBody(node)
+        
+    def createBall(self):
+        ball = Ball(self)
+        self.balls.append(ball)
 
     # finally the event handlers 
     def handleCollisions(self, node1, node2):
-        if node1.getName() == "WickedBall" and  node2.getName() == "Wall":
+        if node1.getName() == "WickedBall" and  node2.getName() == "Goal":
             x = node1.getPythonTag("pyClass")
             x.destroyMe()
-            playerNum = node2.getTag("playerNum")
-            print "player "+playerNum + " just had an utjerani!"
+            player = node2.getPythonTag("player")
+            player.ballInGoal()
