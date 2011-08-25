@@ -1,19 +1,25 @@
-one:
-  type: keyboard
-  left: a
-  right: d
+0:
+  keyboard:
+    left: a
+    right: d
+    forward: w
+    turbo: q
+    back: s
 
-two:
-  type: keyboard
-  left  : f
-  right : h
+1:
+  keyboard:
+    left  : f
+    right : h
+    turbo: g
   
-three:
-  type: keyboard
-  left: j
-  right: l
+2:
+  keyboard:
+    left: j
+    right: l
+    turbo: k
   
-four:
-  type: keyboard
-  left: b
-  right: m
+3:
+  keyboard:
+    left: b
+    right: m
+    turbo: n

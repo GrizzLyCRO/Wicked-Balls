@@ -2,10 +2,12 @@ from direct.showbase.DirectObject import DirectObject
 
 from direct.showbase.ShowBase import ShowBase
 from panda3d.bullet import *
-
 from panda3d.core import *
 
+from wrappers import *
+
 from Ball import Ball
+from Pillar import Pillar
 
 class World(DirectObject):
     
@@ -30,6 +32,7 @@ class World(DirectObject):
         
     def keyBinds(self):
         self.accept("f1",self.toggleDebug)
+        self.accept("f3",self.listBodies)
         self.accept("f2",self.createBall)
         # listen for events 
         self.accept('bullet-contact-added', self.handleCollisions) 
@@ -57,22 +60,12 @@ class World(DirectObject):
         self.btWorld.attachRigidBody(node)
         
     def createPillars(self):
+        self.pillars = []
         angle = 360/self.totalPlayers
         for i in range(self.totalPlayers):
-            shape = BulletCapsuleShape(4,10)
-            node = BulletRigidBodyNode('Pillar')
-            node.addShape(shape)
-            node.setRestitution(1)
-            node.setFriction(0)
-            self.pillar = node
-            NP = render.attachNewNode(node)
             myAngle = angle*i
-            NP.setHpr(myAngle,0,0)
-            dist = self.distance*-1
-            NP.setY(NP,dist)
-            NP.setX(NP,dist)
-            #NP.setPos(0, 0, 0)
-            self.btWorld.attachRigidBody(node)
+            pillar = Pillar(self,myAngle)
+            self.pillars.append(pillar)
         
     def createBall(self):
         ball = Ball(self)
@@ -81,7 +74,11 @@ class World(DirectObject):
     # finally the event handlers 
     def handleCollisions(self, node1, node2):
         if node1.getName() == "WickedBall" and  node2.getName() == "Goal":
-            x = node1.getPythonTag("pyClass")
-            x.destroyMe()
-            player = node2.getPythonTag("player")
-            player.ballInGoal()
+            ball = node1.getPythonTag("pyParent")
+            ball.destroyMe()
+            goal = node2.getPythonTag("pyParent")
+            goal.player.ballInGoal()
+            
+    def listBodies(self):
+        for x in self.btWorld.getRigidBodies():
+            print x
