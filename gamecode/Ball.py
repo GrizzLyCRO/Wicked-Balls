@@ -1,33 +1,18 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.bullet import *
-import math
 from panda3d.core import *
+from wrappers import *
 
 class Ball():
-    def __init__(self,parent):
-        self.parent = parent
-        self.worldNP = parent.NP
-        self.birth = globalClock.getFrameTime()
-        shape = BulletSphereShape(1)
+    def __init__(self,world):
+        self.world = world
         
-        self.node = BulletRigidBodyNode('WickedBall')
-        self.node.addShape(shape)
-        
-        self.node.setMass(1)
-        self.node.setRestitution(1.00)
-        self.node.setFriction(0.25)
-        self.node.setAngularFactor(Vec3(4,4,4))
-        self.worldNP.attachRigidBody(self.node)
-        
-        self.model = loader.loadModel("smiley")
-        
-        self.NP = render.attachNewNode(self.node)
-        self.NP.setPos(5, 0, 1.5)
-        self.model.reparentTo(self.NP)
-        self.NP.setPythonTag("pyClass",self)
-        
+        self.btNode = addBulletObject(self,"WickedBall","Sphere",0.4)
+        self.btNode.setRestitution(1.00)
+        self.NP = addModelToBulletNode(self.btNode,"models/Ball/zero")
+
     def destroyMe(self):
         print "deleting"
-        self.NP.clearPythonTag("pyClass")
-        self.worldNP.removeRigidBody(self.node)
+        self.btNode.clearPythonTag("pyClass")
+        self.world.btWorld.removeRigidBody(self.btNode)
         self.NP.removeNode()

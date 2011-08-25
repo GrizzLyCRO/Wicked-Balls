@@ -1,0 +1,25 @@
+0:
+  keyboard:
+    left: a
+    right: d
+    forward: w
+    turbo: q
+    back: s
+
+1:
+  keyboard:
+    left  : f
+    right : h
+    turbo: g
+  
+2:
+  keyboard:
+    left: j
+    right: l
+    turbo: k
+  
+3:
+  keyboard:
+    left: b
+    right: m
+    turbo: n
