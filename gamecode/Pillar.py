@@ -6,9 +6,13 @@ class Pillar():
         self.setupBulletObject(myAngle)
     
     def setupBulletObject(self,myAngle):
-        self.btNode = addBulletObject(self,"Pillar","Sphere",4)
+        print myAngle
+        self.btNode = addBulletObject(self,"Pillar","Sphere",(10))
+        self.btNode.setMass(0)
+        self.btNode.setRestitution(1.0)
+        self.btNode.setFriction(0)
+        self.btNode.setDisableDeactivation(1)
         self.NP = render.attachNewNode(self.btNode)
         self.NP.setHpr(myAngle,0,0)
         dist = self.world.distance*-1
-        self.NP.setY(self.NP,dist)
-        self.NP.setX(self.NP,dist)
+        self.NP.setPos(self.NP,dist,dist,0.4)

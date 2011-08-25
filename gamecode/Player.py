@@ -22,7 +22,7 @@ class Player(DirectObject):
 
     def setupBody(self):
         
-        self.btNode = addBulletObject(self,"Player","Sphere",1.25)
+        self.btNode = addBulletObject(self,"Player","Capsule",(6,50))
         self.btNode.setKinematic(1)
         self.btNode.setDisableDeactivation(1)
         self.btNode.setMass(100)
@@ -31,7 +31,7 @@ class Player(DirectObject):
         myAngle = angle*self.playerId
         self.NP.setHpr(myAngle,0,0)
         dist = self.world.distance*-1
-        self.NP.setPos(self.NP,(0, dist, 1.01))
+        self.NP.setPos(self.NP,(0, dist, 0.4))
 
         self.btNode.setRestitution(1.0)
         self.btNode.setFriction(0)
@@ -45,7 +45,6 @@ class Player(DirectObject):
         taskMgr.add(self.processInput, "Process Input")
         #keyboard shortcuts
         for action,bind in controls["keyboard"].items():
-            print bind
             self.accept(bind,self.setInputState,[action])
             self.accept(bind+"-up",self.removeInputState,[action])
 
