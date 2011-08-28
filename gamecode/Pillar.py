@@ -7,7 +7,7 @@ class Pillar():
     
     def setupBulletObject(self,myAngle):
         print myAngle
-        self.btNode = addBulletObject(self,"Pillar","Sphere",(10))
+        self.btNode = addBulletObject(self,"Pillar","Sphere",2.5)
         self.btNode.setMass(0)
         self.btNode.setRestitution(1.0)
         self.btNode.setFriction(0)

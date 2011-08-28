@@ -22,7 +22,7 @@ class Player(DirectObject):
 
     def setupBody(self):
         
-        self.btNode = addBulletObject(self,"Player","Capsule",(6,50))
+        self.btNode = addBulletObject(self,"Player","Sphere",1.25)
         self.btNode.setKinematic(1)
         self.btNode.setDisableDeactivation(1)
         self.btNode.setMass(100)
