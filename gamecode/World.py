@@ -25,7 +25,10 @@ class World(DirectObject):
 
     def makeDebugNode(self):
         self.debugNode = BulletDebugNode('Debug')
-        self.debugNode.setVerbose(True)
+        self.debugNode.showWireframe(True) # added 
+        self.debugNode.showConstraints(True) # added 
+        self.debugNode.showBoundingBoxes(False) # added 
+        self.debugNode.showNormals(True) # added
         self.debugNP = render.attachNewNode(self.debugNode)
         self.debugNP.show()
         self.btWorld.setDebugNode(self.debugNP.node())

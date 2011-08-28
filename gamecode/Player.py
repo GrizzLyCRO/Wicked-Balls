@@ -24,7 +24,7 @@ class Player(DirectObject):
         
         self.btNode = addBulletObject(self,"Player","Sphere",1.25)
         self.btNode.setKinematic(1)
-        self.btNode.setDisableDeactivation(1)
+        self.btNode.setDeactivationEnabled(False)
         self.btNode.setMass(100)
         self.NP = addModelToBulletNode(self.btNode,"models/Player/untitled")
         angle = 360/self.world.totalPlayers
