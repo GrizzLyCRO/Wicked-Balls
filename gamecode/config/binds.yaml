@@ -11,7 +11,7 @@
     left  : f
     right : h
     turbo: g
-  
+    
 2:
   keyboard:
     left: j
@@ -23,3 +23,29 @@
     left: b
     right: m
     turbo: n
+4:
+  keyboard:
+    left: u
+    right: o
+    turbo: i
+5:
+  keyboard:
+    left: r
+    right: z
+    turbo: t
+6:
+  keyboard:
+    left: y
+    right: c
+    turbo: x
+7:
+  keyboard:
+    left: v
+    right: b
+    turbo: ","
+8:
+  keyboard:
+    left: "1"
+    right: "3"
+    turbo: "2"
+
