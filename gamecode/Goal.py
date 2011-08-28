@@ -14,7 +14,7 @@ class Goal():
         coords[1] = coords[1]*-1
         coords[2] = 0
         
-        self.btNode = addBulletObject(self,"Goal","Plane",(Vec3(coords), dist-2),"Ghost")
+        self.btNode = addBulletObject(self,"Goal","Plane",(Vec3(coords), dist-1),"Ghost")
         self.btNode.notifyCollisions(True)
         
         
