@@ -66,7 +66,7 @@ class World(DirectObject):
         self.pillars = []
         angle = 360/self.totalPlayers
         for i in range(self.totalPlayers):
-            myAngle = angle*i
+            myAngle = angle*i+angle/2
             pillar = Pillar(self,myAngle)
             self.pillars.append(pillar)
         

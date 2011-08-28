@@ -1,5 +1,5 @@
 from wrappers import *
-
+import math
 class Pillar():
     def __init__(self,world,myAngle):
         self.world = world
@@ -15,4 +15,6 @@ class Pillar():
         self.NP = render.attachNewNode(self.btNode)
         self.NP.setHpr(myAngle,0,0)
         dist = self.world.distance*-1
-        self.NP.setPos(self.NP,dist,dist,0.4)
+        n = self.world.totalPlayers
+        dist = dist/math.cos(math.pi/n)
+        self.NP.setPos(self.NP,0,dist+1,0.4)
